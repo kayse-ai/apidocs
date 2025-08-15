@@ -16,3 +16,6 @@ README.md
 # Ruby files
 vendor/
 .bundle/
+
+# Keep build directory for deployment
+!build/

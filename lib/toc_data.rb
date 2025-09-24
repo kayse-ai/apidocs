@@ -27,7 +27,7 @@ def toc_data(page_content)
       end
     end
   end
-  headers.select {|header| not(['cases', "clients"].include? header[:id].to_s)}
+  headers.select {|header| not(['cases', "clients", 'calls', 'campaigns'].include? header[:id].to_s)}
 end
 
 def resources_data(page_content)
@@ -56,7 +56,7 @@ def resources_data(page_content)
       end
     end
   end
-  headers.select {|header| ['cases', 'clients'].include? header[:id].to_s}
+  headers.select {|header| ['cases', 'clients', 'calls', 'campaigns'].include? header[:id].to_s}
 end
 
 HTTP_METHOD_PAIRS = Hash[
@@ -67,7 +67,10 @@ HTTP_METHOD_PAIRS = Hash[
   "Create a new client" => "POST",
   "Get a client by ID" => "GET",
   "Update a client" => "PUT",
-  "Delete a client" => "DELETE"
+  "Delete a client" => "DELETE",
+  "Create Campaign" => "POST",
+  "List Campaigns" => "GET",
+  "Schedule New AI Call" => "POST"
 ]
 
 def get_http_method(heading)

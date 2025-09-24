@@ -70,7 +70,9 @@ HTTP_METHOD_PAIRS = Hash[
   "Delete a client" => "DELETE",
   "Create Campaign" => "POST",
   "List Campaigns" => "GET",
-  "Schedule New AI Call" => "POST"
+  "Schedule New AI Call" => "POST",
+  "Send SMS to Client + Case" => "POST",
+  "Send Email to Client + Case" => "POST"
 ]
 
 def get_http_method(heading)

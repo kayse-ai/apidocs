@@ -291,3 +291,13 @@ curl --location --request POST 'https://api.kayse.com/v1/clients/bulk' \
 ```
 
 Each entry in the `clients` array adheres to the same schema as the single create endpoint. Providing an `id` updates an existing record, while omitting it creates a new client. Validation failures abort the entire batch and return the corresponding error.
+
+### Request Body Fields
+
+| Field                | Required | Type            | Description                                                                                           |
+|----------------------|----------|-----------------|-------------------------------------------------------------------------------------------------------|
+| clients              | true     | Array\<Object>  | Array of client payloads. Omit `id` to create a client; include `id` to update.                      |
+| clients[].id         | false    | Integer         | Client ID to update.                                                                                  |
+| clients[].case_ids   | false    | Array\<Integer> | Optional case IDs to associate.                                                                       |
+| clients[].voice_calls_opted_out | false | Boolean | Apply the opt-out flag across linked clients/cases when set.                                          |
+| clients[...fields]   | varies   | Mixed           | Remaining fields follow the single-client create schema (`email`, `mobile`, `first_name`, etc.).      |

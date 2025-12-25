@@ -307,6 +307,18 @@ curl --location --request POST 'https://api.kayse.com/v1/cases/bulk' \
 
 Each object in the `cases` array follows the same schema as the create endpoint. When an `id` is omitted the case is created; when `id` is provided the case is updated atomically with the same validation rules as the PUT endpoint. Validation errors stop the batch and return the first error encountered.
 
+### Request Body Fields
+
+| Field              | Required | Type            | Description                                                                                       |
+|--------------------|----------|-----------------|---------------------------------------------------------------------------------------------------|
+| cases              | true     | Array\<Object>  | Array of case payloads. Omit `id` to create; include `id` to update an existing case.             |
+| cases[].id         | false    | Integer         | Case ID to update.                                                                                |
+| cases[].client_ids | false    | Array\<Integer> | Optional list of client IDs to associate. Same validation rules as the create endpoint.           |
+
+All other fields inside each object follow the single-case create schema (`case_number`, `status`, `type`, `opt_out_voice_calls`, etc.).
+| cases[].id         | false    | Integer         | Case ID to update.                                                                                |
+| cases[].client_ids | false    | Array\<Integer> | Optional list of client IDs to associate. Same validation rules as the create endpoint.           |
+
 ## Bulk delete cases
 
 ```shell

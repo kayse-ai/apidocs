@@ -45,6 +45,23 @@ curl --location --request GET 'https://api.kayse.com/v1/metadata/objects' \
         "description": "Primary email"
       }
     ]
+  },
+  {
+    "name": "case_lists",
+    "fields": [
+      {
+        "name": "name",
+        "type": "string",
+        "required": true,
+        "description": "List name"
+      },
+      {
+        "name": "filter",
+        "type": "object",
+        "required": false,
+        "description": "Saved case filter"
+      }
+    ]
   }
 ]
 ```

@@ -27,7 +27,7 @@ def toc_data(page_content)
       end
     end
   end
-  headers.select {|header| not(['cases', "clients", 'calls', 'campaigns'].include? header[:id].to_s)}
+  headers.select {|header| not(['cases', "clients", 'calls', 'campaigns', 'case_lists'].include? header[:id].to_s)}
 end
 
 def resources_data(page_content)
@@ -56,7 +56,7 @@ def resources_data(page_content)
       end
     end
   end
-  headers.select {|header| ['cases', 'clients', 'calls', 'campaigns'].include? header[:id].to_s}
+  headers.select {|header| ['cases', 'clients', 'calls', 'campaigns', 'case_lists'].include? header[:id].to_s}
 end
 
 HTTP_METHOD_PAIRS = Hash[
@@ -64,15 +64,22 @@ HTTP_METHOD_PAIRS = Hash[
   "Get a case by ID" => "GET",
   "Update a case" => "PUT",
   "Delete a case" => "DELETE",
+  "Bulk upsert cases" => "POST",
+  "Bulk delete cases" => "POST",
   "Create a new client" => "POST",
   "Get a client by ID" => "GET",
   "Update a client" => "PUT",
   "Delete a client" => "DELETE",
+  "Bulk upsert clients" => "POST",
+  "List case lists" => "GET",
+  "Create a case list" => "POST",
+  "Bulk upsert case lists" => "POST",
   "Create Campaign" => "POST",
   "List Campaigns" => "GET",
   "Schedule New AI Call" => "POST",
   "Send SMS to Client + Case" => "POST",
-  "Send Email to Client + Case" => "POST"
+  "Send Email to Client + Case" => "POST",
+  "List objects and fields" => "GET"
 ]
 
 def get_http_method(heading)

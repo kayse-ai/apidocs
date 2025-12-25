@@ -26,7 +26,8 @@ curl --location --request POST 'https://api.kayse.com/v1/cases' \
     "created_date": "2024-01-15",
     "court_date": "2024-03-20",
     "end_date": null,
-    "client_id": 123
+    "client_ids": [123, 456],
+    "opt_out_voice_calls": false
 }'
 ```
 
@@ -56,7 +57,9 @@ curl --location --request POST 'https://api.kayse.com/v1/cases' \
     "is_obo": false,
     "created_date": "2024-01-15",
     "court_date": "2024-03-20",
-    "end_date": null
+    "end_date": null,
+    "client_ids": [123, 456],
+    "opt_out_voice_calls": false
 }
 ```
 
@@ -78,7 +81,8 @@ curl --location --request POST 'https://api.kayse.com/v1/cases' \
 | created_date         | false    | Date    | Case creation date (YYYY-MM-DD format)                    |
 | court_date           | false    | Date    | Next court date (YYYY-MM-DD format)                       |
 | end_date             | false    | Date    | Case end date (YYYY-MM-DD format)                         |
-| client_id            | false    | Integer | Associated client ID                                      |
+| client_ids           | false    | Array<Integer> | Associated client IDs (replaces links on create/update)   |
+| opt_out_voice_calls  | false    | Boolean | When true, marks all linked clients voice-calls opted out |
 
 ## Get a case by ID
 
@@ -149,7 +153,9 @@ curl --location --request PUT 'https://api.kayse.com/v1/cases/456' \
     "is_obo": false,
     "created_date": "2024-01-15",
     "court_date": "2024-03-20",
-    "end_date": null
+    "end_date": null,
+    "client_ids": [123, 456],
+    "opt_out_voice_calls": true
 }'
 ```
 
@@ -181,7 +187,9 @@ curl --location --request PUT 'https://api.kayse.com/v1/cases/456' \
     "is_obo": false,
     "created_date": "2024-01-15",
     "court_date": "2024-03-20",
-    "end_date": "2024-06-15"
+    "end_date": "2024-06-15",
+    "client_ids": [123, 456],
+    "opt_out_voice_calls": true
 }
 ```
 
@@ -237,6 +245,93 @@ curl --location --request DELETE 'https://api.kayse.com/v1/cases/456' \
 | Field | Required | Type   | Description                    |
 |-------|----------|--------|--------------------------------|
 | id    | true     | Integer| The unique identifier of the case |
+
+## Bulk upsert cases
+
+```shell
+curl --location --request POST 'https://api.kayse.com/v1/cases/bulk' \
+--header 'accept: application/json' \
+--header 'x-api-key: {{apikey}}' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+  "cases": [
+    {
+      "case_number": "CASE-2024-001",
+      "external_source": "other",
+      "external_source_id": "external-001",
+      "name": "Smith vs Johnson",
+      "status": "open",
+      "type": "civil",
+      "client_ids": [11,22]
+    },
+    {
+      "id": 456,
+      "external_source": "other",
+      "external_source_id": "external-002",
+      "name": "Brown vs Doe",
+      "status": "closed",
+      "type": "civil",
+      "opt_out_voice_calls": true
+    }
+  ]
+}'
+```
+
+### HTTP Request
+
+`POST https://api.kayse.com/v1/cases/bulk`
+
+> The above command returns JSON structured like this (per case):
+
+```json
+{
+  "cases": [
+    {
+      "id": 789,
+      "case_number": "CASE-2024-001",
+      "name": "Smith vs Johnson",
+      "status": "open",
+      "type": "civil",
+      "client_ids": [11,22]
+    },
+    {
+      "id": 456,
+      "name": "Brown vs Doe",
+      "status": "closed",
+      "type": "civil",
+      "opt_out_voice_calls": true
+    }
+  ]
+}
+```
+
+Each object in the `cases` array follows the same schema as the create endpoint. When an `id` is omitted the case is created; when `id` is provided the case is updated atomically with the same validation rules as the PUT endpoint. Validation errors stop the batch and return the first error encountered.
+
+## Bulk delete cases
+
+```shell
+curl --location --request POST 'https://api.kayse.com/v1/cases/bulk_delete' \
+--header 'accept: application/json' \
+--header 'x-api-key: {{apikey}}' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+  "ids": [456, 789, 790],
+  "with_clients": false
+}'
+```
+
+### HTTP Request
+
+`POST https://api.kayse.com/v1/cases/bulk_delete`
+
+### Request Body Fields
+
+| Field        | Required | Type            | Description                                                                 |
+|--------------|----------|-----------------|-----------------------------------------------------------------------------|
+| ids          | true     | Array<Integer>  | Case IDs to delete (max 500 per request)                                    |
+| with_clients | false    | Boolean         | When true, also deletes any clients that are exclusively linked to the case |
+
+Successful responses return `deleted_ids` with the list of IDs that were removed and audit logs are emitted per case.
 
 ## Send SMS to Client + Case
 

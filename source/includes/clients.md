@@ -229,3 +229,62 @@ curl --location --request DELETE 'https://api.kayse.com/v1/clients/123' \
 | Field | Required | Type   | Description                    |
 |-------|----------|--------|--------------------------------|
 | id    | true     | Integer| The unique identifier of the client |
+
+## Bulk upsert clients
+
+```shell
+curl --location --request POST 'https://api.kayse.com/v1/clients/bulk' \
+--header 'accept: application/json' \
+--header 'x-api-key: {{apikey}}' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+  "clients": [
+    {
+      "email": "new.client@example.com",
+      "external_source": "manual",
+      "external_source_id": "external-901",
+      "first_name": "New",
+      "last_name": "Client",
+      "case_ids": [12345]
+    },
+    {
+      "id": 123,
+      "external_source": "manual",
+      "external_source_id": "external-123",
+      "first_name": "John",
+      "last_name": "Doe",
+      "voice_calls_opted_out": true
+    }
+  ]
+}'
+```
+
+### HTTP Request
+
+`POST https://api.kayse.com/v1/clients/bulk`
+
+> The above command returns JSON structured like this (per client):
+
+```json
+{
+  "clients": [
+    {
+      "id": 999,
+      "email": "new.client@example.com",
+      "external_source": "manual",
+      "external_source_id": "external-901",
+      "first_name": "New",
+      "last_name": "Client",
+      "case_ids": [12345]
+    },
+    {
+      "id": 123,
+      "first_name": "John",
+      "last_name": "Doe",
+      "voice_calls_opted_out": true
+    }
+  ]
+}
+```
+
+Each entry in the `clients` array adheres to the same schema as the single create endpoint. Providing an `id` updates an existing record, while omitting it creates a new client. Validation failures abort the entire batch and return the corresponding error.

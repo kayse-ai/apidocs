@@ -26,8 +26,10 @@ includes:
   - errors
   - clients
   - cases
+  - case_lists
   - calls
   - campaigns
+  - metadata
 
 search: true
 code_clipboard: true

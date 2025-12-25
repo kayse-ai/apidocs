@@ -26,7 +26,8 @@ curl --location --request POST 'https://api.kayse.com/v1/cases' \
     "created_date": "2024-01-15",
     "court_date": "2024-03-20",
     "end_date": null,
-    "client_id": 123
+    "client_ids": [123, 456],
+    "opt_out_voice_calls": false
 }'
 ```
 
@@ -56,7 +57,9 @@ curl --location --request POST 'https://api.kayse.com/v1/cases' \
     "is_obo": false,
     "created_date": "2024-01-15",
     "court_date": "2024-03-20",
-    "end_date": null
+    "end_date": null,
+    "client_ids": [123, 456],
+    "opt_out_voice_calls": false
 }
 ```
 
@@ -78,7 +81,8 @@ curl --location --request POST 'https://api.kayse.com/v1/cases' \
 | created_date         | false    | Date    | Case creation date (YYYY-MM-DD format)                    |
 | court_date           | false    | Date    | Next court date (YYYY-MM-DD format)                       |
 | end_date             | false    | Date    | Case end date (YYYY-MM-DD format)                         |
-| client_id            | false    | Integer | Associated client ID                                      |
+| client_ids           | false    | Array<Integer> | Associated client IDs (replaces links on create/update)   |
+| opt_out_voice_calls  | false    | Boolean | When true, marks all linked clients voice-calls opted out |
 
 ## Get a case by ID
 
@@ -149,7 +153,9 @@ curl --location --request PUT 'https://api.kayse.com/v1/cases/456' \
     "is_obo": false,
     "created_date": "2024-01-15",
     "court_date": "2024-03-20",
-    "end_date": null
+    "end_date": null,
+    "client_ids": [123, 456],
+    "opt_out_voice_calls": true
 }'
 ```
 
@@ -181,7 +187,9 @@ curl --location --request PUT 'https://api.kayse.com/v1/cases/456' \
     "is_obo": false,
     "created_date": "2024-01-15",
     "court_date": "2024-03-20",
-    "end_date": "2024-06-15"
+    "end_date": "2024-06-15",
+    "client_ids": [123, 456],
+    "opt_out_voice_calls": true
 }
 ```
 

@@ -25,7 +25,7 @@ curl --location --request POST 'https://api.kayse.com/v1/clients' \
         "notes": "Client prefers email communication",
         "source": "website"
     },
-    "case_id": 12345
+    "case_ids": [12345, 67890]
 }'
 ```
 
@@ -56,7 +56,8 @@ curl --location --request POST 'https://api.kayse.com/v1/clients' \
     "meta": {
         "notes": "Client prefers email communication",
         "source": "website"
-    }
+    },
+    "case_ids": [12345, 67890]
 }
 ```
 
@@ -141,7 +142,8 @@ curl --location --request PUT 'https://api.kayse.com/v1/clients/123' \
     "meta": {
         "notes": "Updated contact information",
         "source": "website"
-    }
+    },
+    "case_ids": [12345, 67890]
 }'
 ```
 
@@ -172,7 +174,8 @@ curl --location --request PUT 'https://api.kayse.com/v1/clients/123' \
     "meta": {
         "notes": "Updated contact information",
         "source": "website"
-    }
+    },
+    "case_ids": [12345, 67890]
 }
 ```
 
@@ -202,7 +205,7 @@ Keep in mind that this is a PUT endpoint (NOT PATCH), and thus all optional fiel
 | address_line2        | false    | String  | Secondary address line                                    |
 | date_of_death        | false    | Date    | Date of death (YYYY-MM-DD format)                         |
 | meta                 | false    | Object  | Additional metadata as key-value pairs                    |
-| case_id              | false    | Integer | Associated case ID                                        |
+| case_ids             | false    | Array<Integer> | Associated case IDs (replaces links on create/update)     |
 
 ## Delete a client
 
